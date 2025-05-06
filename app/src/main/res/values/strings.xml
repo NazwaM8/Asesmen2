@@ -4,4 +4,9 @@
     <string name="x_clicked">%1$s Clicked!</string>
     <string name="add_data">Add Data</string>
     <string name="cant_add">Can\'t Add Data Yet</string>
+    <string name="title">Title</string>
+    <string name="year">Year Release</string>
+    <string name="type">Type</string>
+    <string name="episode">Total Episode</string>
+    <string name="rating">Rating</string>
 </resources>
