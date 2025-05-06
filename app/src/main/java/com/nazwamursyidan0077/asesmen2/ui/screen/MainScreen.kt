@@ -34,15 +34,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.nazwamursyidan0077.asesmen2.R
 import com.nazwamursyidan0077.asesmen2.model.AniDrama
+import com.nazwamursyidan0077.asesmen2.navigation.Screen
 import com.nazwamursyidan0077.asesmen2.ui.theme.Asesmen2Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
-    val context = LocalContext.current
-
+fun MainScreen(navController: NavHostController) {
     Scaffold (
         topBar = {
             TopAppBar(
@@ -58,7 +59,7 @@ fun MainScreen() {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    Toast.makeText(context, R.string.cant_add, Toast.LENGTH_SHORT).show()
+                    navController.navigate(Screen.FormBaru.route)
                 }
             ) {
                 Icon(
@@ -141,6 +142,6 @@ fun ListItem(aniDrama: AniDrama, onCLick: () -> Unit) {
 @Composable
 fun MainScreenPreview() {
     Asesmen2Theme {
-        MainScreen()
+        MainScreen(rememberNavController())
     }
 }

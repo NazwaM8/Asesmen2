@@ -8,13 +8,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -37,12 +41,14 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.nazwamursyidan0077.asesmen2.R
 import com.nazwamursyidan0077.asesmen2.ui.theme.Asesmen2Theme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen() {
+fun DetailScreen(navController: NavHostController) {
     var titles by remember { mutableStateOf("") }
     var yearRelease by remember { mutableStateOf("") }
     var types by remember { mutableStateOf("") }
@@ -51,13 +57,32 @@ fun DetailScreen() {
     Scaffold(
         topBar = {
             TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = {navController.popBackStack()}) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                },
                 title = {
                     Text(text = stringResource(id = R.string.add_data))
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary
-                )
+                ),
+                actions = {
+                    IconButton(onClick = {navController.popBackStack()}) {
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(R.string.save),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
             )
         }
     ) { padding ->
@@ -112,15 +137,17 @@ fun FormAniDrama(
             ),
             modifier = Modifier.fillMaxWidth()
         )
+
         RadioButtonType(
             selectedType = selectedType,
-            onTypeChange = onTypeChange
+            onTypeChange = onTypeChange,
+            modifier = Modifier.padding(top = 8.dp)
         )
         if (selectedType == "Series") {
             OutlinedTextField(
                 value = eps,
                 onValueChange = {onEpsChange(it)},
-                label = { Text(text = stringResource(R.string.type)) },
+                label = { Text(text = stringResource(R.string.episode)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
@@ -149,38 +176,39 @@ fun RadioButtonType(
     modifier: Modifier = Modifier
 ) {
     val radioOptions = listOf("Series", "Movie")
-    Column (
+
+    Row (
         modifier = modifier
             .fillMaxWidth()
             .border(
                 BorderStroke(1.dp, Color.Gray),
                 shape = RoundedCornerShape(4.dp)
             )
+            .padding(16.dp)
+            .selectableGroup(),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column(modifier.selectableGroup()) {
-            radioOptions.forEach { text ->
-                Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .selectable(
-                            selected = (text == selectedType),
-                            onClick = { onTypeChange(text) },
-                            role = Role.RadioButton
-                        )
-                        .padding(horizontal = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    RadioButton(
+        radioOptions.forEach { text ->
+            Row(
+                modifier = Modifier
+                    .selectable(
                         selected = (text == selectedType),
-                        onClick = null
+                        onClick = { onTypeChange(text) },
+                        role = Role.RadioButton
                     )
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 16.dp)
-                    )
-                }
+                    .padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                RadioButton(
+                    selected = (text == selectedType),
+                    onClick = null
+                )
+                Text(
+                    text = text,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(start = 4.dp)
+                )
             }
         }
     }
@@ -191,6 +219,6 @@ fun RadioButtonType(
 @Composable
 fun DetailScreenPreview() {
     Asesmen2Theme {
-        DetailScreen()
+        DetailScreen(rememberNavController())
     }
 }
