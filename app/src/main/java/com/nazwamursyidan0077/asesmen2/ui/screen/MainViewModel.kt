@@ -16,10 +16,10 @@ class MainViewModel : ViewModel() {
         ),
         AniDrama(
             2,
-            "Attack On Titan",
+            "Love Revolution",
             "Series",
-            25,
-            2013,
+            30,
+            2020,
             9
         ),
         AniDrama(
