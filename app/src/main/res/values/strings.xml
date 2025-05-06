@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Asesmen2</string>
     <string name="empty_list">No Data</string>
+    <string name="x_clicked">%1$s Clicked!</string>
 </resources>
