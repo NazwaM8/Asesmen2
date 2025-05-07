@@ -12,4 +12,6 @@
     <string name="save">Save</string>
     <string name="edit">Edit</string>
     <string name="invalid">Please fill in all the form</string>
+    <string name="other">Another option</string>
+    <string name="delete">Delete</string>
 </resources>

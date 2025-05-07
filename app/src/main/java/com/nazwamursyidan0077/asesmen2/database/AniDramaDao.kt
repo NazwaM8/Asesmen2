@@ -20,4 +20,7 @@ interface AniDramaDao {
 
     @Query("SELECT * FROM anidrama WHERE id = :id")
     suspend fun getAniDramaById(id: Long): AniDrama?
+
+    @Query("DELETE FROM anidrama WHERE id = :id")
+    suspend fun deleteById(id: Long)
 }
