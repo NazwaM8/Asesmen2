@@ -31,4 +31,7 @@ class MainViewModel : ViewModel() {
             9
         )
     )
+    fun getAniDrama(id: Long): AniDrama? {
+        return data.find { it.id == id }
+    }
 }

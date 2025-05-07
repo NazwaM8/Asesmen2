@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.nazwamursyidan0077.asesmen2.R
@@ -51,11 +53,25 @@ const val KEY_ID_ANIDRAMA = "idAniDrama"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
+    val viewModel: MainViewModel = viewModel()
+
     var titles by remember { mutableStateOf("") }
     var yearRelease by remember { mutableStateOf("") }
     var types by remember { mutableStateOf("") }
     var episode by remember { mutableStateOf("") }
     var ratings by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        if (id == null) return@LaunchedEffect
+        val data = viewModel.getAniDrama(id) ?: return@LaunchedEffect
+        titles = data.title
+        yearRelease = data.releaseDate.toString()
+        types = data.type
+        episode = data.episode.toString()
+        ratings = data.rating.toString()
+
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
