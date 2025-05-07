@@ -133,7 +133,8 @@ fun ListItem(aniDrama: AniDrama, onCLick: () -> Unit) {
             fontSize = 18.sp
         )
         Text(text = aniDrama.type)
-        Text(text = "Eps: " + aniDrama.episode.toString())
+        if (aniDrama.type == "Series")
+            Text(text = "Eps: " + aniDrama.episode.toString())
 
         Text(text = "Rating: " + aniDrama.rating.toString())
     }

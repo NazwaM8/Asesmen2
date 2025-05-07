@@ -11,4 +11,5 @@
     <string name="back">Back</string>
     <string name="save">Save</string>
     <string name="edit">Edit</string>
+    <string name="invalid">Please fill in all the form</string>
 </resources>

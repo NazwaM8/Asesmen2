@@ -15,9 +15,4 @@ class MainViewModel(dao: AniDramaDao) : ViewModel() {
         started = SharingStarted.WhileSubscribed(),
         initialValue = emptyList()
     )
-
-
-    fun getAniDrama(id: Long): AniDrama? {
-        return data.value.find { it.id == id }
-    }
 }

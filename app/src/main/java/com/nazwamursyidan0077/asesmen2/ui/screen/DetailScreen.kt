@@ -1,6 +1,7 @@
 package com.nazwamursyidan0077.asesmen2.ui.screen
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
@@ -47,19 +49,34 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.nazwamursyidan0077.asesmen2.R
 import com.nazwamursyidan0077.asesmen2.ui.theme.Asesmen2Theme
+import com.nazwamursyidan0077.asesmen2.util.ViewModelFactory
 
 const val KEY_ID_ANIDRAMA = "idAniDrama"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(navController: NavHostController, id: Long? = null) {
-    val viewModel: MainViewModel = viewModel()
+    val context = LocalContext.current
+    val factory = ViewModelFactory(context)
+    val viewModel: DetailViewModel = viewModel(factory = factory)
 
     var titles by remember { mutableStateOf("") }
+
     var yearRelease by remember { mutableStateOf("") }
+    val yearInt = yearRelease.toIntOrNull()
+    val yearValid = yearInt in 1800..2025
+
     var types by remember { mutableStateOf("") }
+
     var episode by remember { mutableStateOf("") }
+    val epsInt = if (types == "Series") episode.toIntOrNull() else 0
+    val epsValid = if (types == "Series") epsInt in 1..10000 else true
+
     var ratings by remember { mutableStateOf("") }
+    val ratingInt = ratings.toIntOrNull()
+    val ratingValid = ratingInt in 1..10
+
+    val isFormValid = yearValid && epsValid && ratingValid
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
@@ -95,11 +112,24 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     titleContentColor = MaterialTheme.colorScheme.primary
                 ),
                 actions = {
-                    IconButton(onClick = {navController.popBackStack()}) {
+                    IconButton(
+                        onClick = {
+                            if (titles == "" || yearRelease == "" || types == "" || (types == "Series") && episode == "" || ratings == "") {
+                                Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
+                                return@IconButton
+                            }
+
+                            if (id == null) {
+                                viewModel.insert(titles, yearInt!!, types, epsInt ?: 0, ratingInt!!)
+                            }
+                            navController.popBackStack()
+                        },
+                        enabled = isFormValid
+                    ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(R.string.save),
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = if (isFormValid) MaterialTheme.colorScheme.primary else Color.Gray
                         )
                     }
                 }
@@ -118,6 +148,9 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                 onEpsChange = {episode = it},
                 rating = ratings,
                 onRatingChange = {ratings = it},
+                yearValid = yearValid,
+                epsValid = epsValid,
+                ratingValid = ratingValid,
                 modifier = Modifier.padding(padding)
             )
     }
@@ -130,6 +163,9 @@ fun FormAniDrama(
     selectedType: String, onTypeChange: (String) -> Unit,
     eps: String, onEpsChange: (String) -> Unit,
     rating: String, onRatingChange: (String) -> Unit,
+    yearValid : Boolean,
+    epsValid : Boolean,
+    ratingValid : Boolean,
     modifier: Modifier
 ) {
     Column (
@@ -152,6 +188,11 @@ fun FormAniDrama(
             onValueChange = {onYearChange(it)},
             label = { Text(text = stringResource(R.string.year)) },
             singleLine = true,
+            isError = !yearValid && year.isNotEmpty(),
+            supportingText = {
+                if (!yearValid && year.isNotEmpty())
+                    Text("Year must be between 1800-2025")
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Next
@@ -170,6 +211,11 @@ fun FormAniDrama(
                 onValueChange = {onEpsChange(it)},
                 label = { Text(text = stringResource(R.string.episode)) },
                 singleLine = true,
+                isError = !epsValid && eps.isNotEmpty(),
+                supportingText = {
+                    if (!epsValid && eps.isNotEmpty())
+                        Text("Episode must be between 1–10000")
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
@@ -182,6 +228,11 @@ fun FormAniDrama(
             onValueChange = {onRatingChange(it)},
             label = { Text(text = stringResource(R.string.rating)) },
             singleLine = true,
+            isError = !ratingValid && rating.isNotEmpty(),
+            supportingText = {
+                if (!ratingValid && rating.isNotEmpty())
+                    Text("Rating must be between 1–10")
+            },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number
             ),
