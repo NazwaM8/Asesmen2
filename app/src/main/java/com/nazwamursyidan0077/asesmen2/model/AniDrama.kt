@@ -1,7 +1,12 @@
 package com.nazwamursyidan0077.asesmen2.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "anidrama")
 data class AniDrama(
-    val id: Long,
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
     val title: String,
     val type: String,
     val episode: Int,
