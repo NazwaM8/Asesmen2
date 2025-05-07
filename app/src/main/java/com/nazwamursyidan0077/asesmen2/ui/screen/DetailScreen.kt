@@ -118,10 +118,11 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                                 Toast.makeText(context, R.string.invalid, Toast.LENGTH_LONG).show()
                                 return@IconButton
                             }
-
                             if (id == null) {
                                 viewModel.insert(titles, yearInt!!, types, epsInt ?: 0, ratingInt!!)
-                            }
+                            } else (
+                                viewModel.update(id, titles, yearInt!!, types, epsInt ?: 0, ratingInt!!)
+                            )
                             navController.popBackStack()
                         },
                         enabled = isFormValid

@@ -22,7 +22,21 @@ class DetailViewModel(private val dao: AniDramaDao) : ViewModel() {
             dao.insert(aniDrama)
         }
     }
-    fun getAniDrama(id: Long): AniDrama? {
-        return null
+    suspend fun getAniDrama(id: Long): AniDrama? {
+        return dao.getAniDramaById(id)
+    }
+
+    fun update(id: Long, title: String, releaseDate: Int, type: String, eps: Int, rating: Int) {
+        val aniDrama = AniDrama(
+            id = id,
+            title = title,
+            releaseDate = releaseDate,
+            type = type,
+            episode = eps,
+            rating = rating
+        )
+        viewModelScope.launch(Dispatchers.IO) {
+            dao.update(aniDrama)
+        }
     }
 }

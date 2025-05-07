@@ -17,4 +17,7 @@ interface AniDramaDao {
 
     @Query("SELECT * FROM anidrama ORDER BY releaseDate DESC")
     fun getAniDrama(): Flow<List<AniDrama>>
+
+    @Query("SELECT * FROM anidrama WHERE id = :id")
+    suspend fun getAniDramaById(id: Long): AniDrama?
 }
