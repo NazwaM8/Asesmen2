@@ -1,37 +1,23 @@
 package com.nazwamursyidan0077.asesmen2.ui.screen
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.nazwamursyidan0077.asesmen2.database.AniDramaDao
 import com.nazwamursyidan0077.asesmen2.model.AniDrama
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
-class MainViewModel : ViewModel() {
+class MainViewModel(dao: AniDramaDao) : ViewModel() {
 
-    val data = listOf(
-        AniDrama(
-            1,
-            "My Hero Academia",
-            "Series",
-            13,
-            2016,
-            9
-        ),
-        AniDrama(
-            2,
-            "Love Revolution",
-            "Series",
-            30,
-            2020,
-            9
-        ),
-        AniDrama(
-            3,
-            "Weak Hero Class 1",
-            "Series",
-            8,
-            2022,
-            9
-        )
+    val data: StateFlow<List<AniDrama>> = dao.getAniDrama().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(),
+        initialValue = emptyList()
     )
+
+
     fun getAniDrama(id: Long): AniDrama? {
-        return data.find { it.id == id }
+        return data.value.find { it.id == id }
     }
 }
