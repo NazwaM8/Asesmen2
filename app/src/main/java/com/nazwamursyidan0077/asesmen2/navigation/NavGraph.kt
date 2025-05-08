@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.nazwamursyidan0077.asesmen2.ui.screen.DetailScreen
 import com.nazwamursyidan0077.asesmen2.ui.screen.KEY_ID_ANIDRAMA
 import com.nazwamursyidan0077.asesmen2.ui.screen.MainScreen
+import com.nazwamursyidan0077.asesmen2.ui.screen.TrashScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
@@ -23,6 +24,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         composable(route = Screen.FormBaru.route) {
             DetailScreen(navController)
         }
+        composable(route = Screen.Trash.route) {
+            TrashScreen(navController)
+        }
         composable(
             route = Screen.FormUbah.route,
             arguments = listOf(
@@ -32,5 +36,7 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
             val id = navBackStackEntry.arguments?.getLong(KEY_ID_ANIDRAMA)
             DetailScreen(navController, id)
         }
+
+
     }
 }

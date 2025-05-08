@@ -11,5 +11,6 @@ data class AniDrama(
     val type: String,
     val episode: Int,
     val releaseDate: Int,
-    val rating: Int
+    val rating: Int,
+    val isDeleted: Boolean = false
 )

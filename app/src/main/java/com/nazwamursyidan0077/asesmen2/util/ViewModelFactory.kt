@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.nazwamursyidan0077.asesmen2.database.AniDramaDb
 import com.nazwamursyidan0077.asesmen2.ui.screen.DetailViewModel
 import com.nazwamursyidan0077.asesmen2.ui.screen.MainViewModel
+import com.nazwamursyidan0077.asesmen2.ui.screen.TrashViewModel
 
 class ViewModelFactory(
     private val context: Context
@@ -17,6 +18,8 @@ class ViewModelFactory(
             return MainViewModel(dao) as T
         } else if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
             return DetailViewModel(dao) as T
+        } else if (modelClass.isAssignableFrom(TrashViewModel::class.java)) {
+            return TrashViewModel(dao) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

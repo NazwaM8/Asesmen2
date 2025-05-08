@@ -138,7 +138,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                     if (id != null) {
                         DeleteAction {
-                            viewModel.delete(id)
+                            viewModel.softDelete(id)
                             navController.popBackStack()
                         }
                     }
@@ -312,7 +312,7 @@ fun DeleteAction(delete: () -> Unit) {
         ) {
             DropdownMenuItem(
                 text = {
-                    Text(text = stringResource(id = R.string.delete))
+                    Text(text = stringResource(id = R.string.recycle_bin))
                 },
                 onClick = {
                     expanded = false
