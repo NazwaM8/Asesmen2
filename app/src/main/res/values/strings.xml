@@ -14,7 +14,8 @@
     <string name="invalid">Please fill in all the form</string>
     <string name="other">Another option</string>
     <string name="delete">Delete</string>
-    <string name="recycle_bin">Move to Recycle Bin</string>
     <string name="restore">Restore</string>
     <string name="trash">Recycle Bin</string>
+    <string name="trash_message">Move to Recycle Bin?</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -81,6 +81,8 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     val isFormValid = yearValid && epsValid && ratingValid
 
+    var showDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
         val data = viewModel.getAniDrama(id) ?: return@LaunchedEffect
@@ -138,8 +140,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                     }
                     if (id != null) {
                         DeleteAction {
-                            viewModel.softDelete(id)
-                            navController.popBackStack()
+                            showDialog = true
                         }
                     }
                 }
@@ -147,22 +148,30 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             )
         }
     ) { padding ->
-            FormAniDrama(
-                title = titles,
-                onTitleChange = {titles = it},
-                year = yearRelease,
-                onYearChange = {yearRelease = it},
-                selectedType = types,
-                onTypeChange = {types = it},
-                eps = episode,
-                onEpsChange = {episode = it},
-                rating = ratings,
-                onRatingChange = {ratings = it},
-                yearValid = yearValid,
-                epsValid = epsValid,
-                ratingValid = ratingValid,
-                modifier = Modifier.padding(padding)
-            )
+        FormAniDrama(
+            title = titles,
+            onTitleChange = { titles = it },
+            year = yearRelease,
+            onYearChange = { yearRelease = it },
+            selectedType = types,
+            onTypeChange = { types = it },
+            eps = episode,
+            onEpsChange = { episode = it },
+            rating = ratings,
+            onRatingChange = { ratings = it },
+            yearValid = yearValid,
+            epsValid = epsValid,
+            ratingValid = ratingValid,
+            modifier = Modifier.padding(padding)
+        )
+        if (id != null && showDialog) {
+            DisplayAlertDialogRecycle(
+                onDismissRequest = {showDialog = false}) {
+                showDialog = false
+                viewModel.softDelete(id)
+                navController.popBackStack()
+            }
+        }
     }
 }
 
@@ -179,7 +188,9 @@ fun FormAniDrama(
     modifier: Modifier
 ) {
     Column (
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
