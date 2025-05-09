@@ -7,8 +7,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -191,19 +193,22 @@ fun FormAniDrama(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         OutlinedTextField(
             value = title,
             onValueChange = {onTitleChange(it)},
             label = { Text(text = stringResource(R.string.title)) },
             singleLine = true,
+            supportingText = { Text("") },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Words,
                 imeAction = ImeAction.Next
             ),
             modifier = Modifier.fillMaxWidth()
         )
+
+
         OutlinedTextField(
             value = year,
             onValueChange = {onYearChange(it)},
@@ -221,11 +226,15 @@ fun FormAniDrama(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(modifier = Modifier.height(10.dp))
+
         RadioButtonType(
             selectedType = selectedType,
-            onTypeChange = onTypeChange,
-            modifier = Modifier.padding(top = 8.dp)
+            onTypeChange = onTypeChange
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         if (selectedType == "Series") {
             OutlinedTextField(
                 value = eps,
@@ -289,8 +298,7 @@ fun RadioButtonType(
                         selected = (text == selectedType),
                         onClick = { onTypeChange(text) },
                         role = Role.RadioButton
-                    )
-                    .padding(horizontal = 16.dp),
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 RadioButton(
