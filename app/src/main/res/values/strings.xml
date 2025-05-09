@@ -16,6 +16,9 @@
     <string name="delete">Delete</string>
     <string name="restore">Restore</string>
     <string name="trash">Recycle Bin</string>
+    <string name="recycle_bin">Move to Recycle Bin</string>
     <string name="trash_message">Move to Recycle Bin?</string>
     <string name="cancel">Cancel</string>
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
 </resources>
